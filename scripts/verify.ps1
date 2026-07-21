@@ -30,4 +30,3 @@ foreach ($entry in $catalog.skills) {
 }
 
 Write-Output "Public marketplace verification passed: $($catalog.skills.Count) skill(s)."
-

@@ -181,4 +181,3 @@ Before reporting completion:
 Report the authoritative, share, and preview paths; tab, step, node, and edge
 counts; evidence roots; current/planned/uncertain boundaries; verification
 performed; and committed or uncommitted status.
-
