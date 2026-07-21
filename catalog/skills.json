@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "id": "interactive-workflow-workbench",
+      "path": "skills/interactive-workflow-workbench",
+      "license": "Apache-2.0",
+      "sha256": "ca1a25cb6ecfb870c679655a75dd093a80a560c63dd20bfc740f22b647aa91b6"
+    }
+  ]
+}

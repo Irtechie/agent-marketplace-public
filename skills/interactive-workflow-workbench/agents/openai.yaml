@@ -1,0 +1,4 @@
+interface:
+  display_name: "Interactive Workflow Workbench"
+  short_description: "Build interactive evidence-backed workflow maps"
+  default_prompt: "Use $interactive-workflow-workbench to turn this system into an evidence-backed interactive workflow map."
