@@ -11,9 +11,10 @@ install the whole marketplace.
 | Skill | Purpose |
 |---|---|
 | [`interactive-workflow-workbench`](skills/interactive-workflow-workbench/) | Build evidence-grounded, interactive HTML workflow and architecture workbenches. |
+| [`pr-review-workbench`](skills/pr-review-workbench/) | Turn a repository PR inbox into a terse, visual, minimum-evidence review workbench. |
 
 Machine-readable discovery metadata lives in `catalog/skills.json`. A listed
-SHA256 pins the skill's `SKILL.md` content.
+SHA256 pins the complete normalized skill package.
 
 ## Trust
 

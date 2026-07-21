@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:">
+  <title>Example · Evidence review gate</title>
+  <style>
+    :root{--bg:#09111f;--panel:#121e33;--line:#2b3c5c;--text:#f6f8ff;--muted:#a8b4cc;--blue:#68a8ff;--amber:#ffd166;--green:#63d49a}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,sans-serif}
+    header{padding:16px 24px;border-bottom:1px solid var(--line)}button{color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px}
+    button[aria-selected="true"]{border-color:var(--blue);color:var(--blue)}.tabs{display:flex;gap:8px;padding:16px 24px}.layout{display:grid;grid-template-columns:190px 1fr 290px;min-height:76vh}
+    nav,.inspector{padding:20px;border-color:var(--line);border-style:solid;border-width:0 1px 0 0}.inspector{border-width:0 0 0 1px}.step{display:block;width:100%;margin-bottom:8px;text-align:left}
+    .step.active{border-color:var(--blue)}main{padding:26px}.flow{display:grid;grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:center;gap:8px}.node{min-height:126px;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+    .node.gate{border-color:var(--amber)}.node.proof{border-color:var(--green)}.edge{text-align:center;color:var(--blue);font-size:1.7rem}.label{color:var(--muted);font-size:.85rem}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#203253;color:var(--blue)}
+    [data-panel][hidden]{display:none}@media(max-width:850px){.layout{grid-template-columns:1fr}nav,.inspector{border:0;border-bottom:1px solid var(--line)}.flow{grid-template-columns:1fr}.edge{transform:rotate(90deg)}}
+  </style>
+</head>
+<body>
+  <header><b>Evidence Review Gate</b> · interactive-workflow-workbench example</header>
+  <div class="tabs" role="tablist"><button aria-selected="true" data-tab="overview">Overview</button><button aria-selected="false" data-tab="review">Review path</button></div>
+  <section data-panel="overview">
+    <div class="layout"><nav><span class="pill">Topology</span><p class="label">One owner, one gate, explicit terminals.</p></nav>
+      <main><h1>Can this change move forward?</h1><div class="flow">
+        <article class="node"><b>Evidence packet</b><p>Scope, behavior, checks, and immutable revision.</p></article><div class="edge">→</div>
+        <article class="node gate"><b>Decision gate</b><p>Complete, current, and policy-compliant?</p></article><div class="edge">→</div>
+        <article class="node proof"><b>Human decision</b><p>Ready to assess—not automatically approved.</p></article>
+      </div></main><aside class="inspector"><h2>Evidence</h2><p>Current revision: <code>abc123</code></p><p>Proof: executable checks</p><p>Fallback: repair or block</p></aside>
+    </div>
+  </section>
+  <section data-panel="review" hidden>
+    <div class="layout"><nav><button class="step active" data-step="1">1 · Collect</button><button class="step" data-step="2">2 · Validate</button><button class="step" data-step="3">3 · Decide</button></nav>
+      <main><h1 id="step-title">Collect bounded evidence</h1><p id="step-copy">Pin the exact revision and label missing datasets instead of treating them as clean.</p>
+        <div class="flow"><article class="node"><b>Input</b><p>Repository + revision</p></article><div class="edge">→</div><article class="node gate"><b>Gate</b><p id="gate-copy">Are all required datasets known?</p></article><div class="edge">→</div><article class="node proof"><b>Output</b><p id="output-copy">Normalized evidence packet</p></article></div>
+      </main><aside class="inspector"><h2>Talk track</h2><p id="talk-track">Unknown evidence blocks readiness.</p><p class="label">Use ← and → to step.</p></aside>
+    </div>
+  </section>
+  <script>
+    const steps={1:['Collect bounded evidence','Pin the exact revision and label missing datasets instead of treating them as clean.','Are all required datasets known?','Normalized evidence packet','Unknown evidence blocks readiness.'],2:['Validate claims and proof','Connect each behavioral claim to source and executable or structural evidence.','Does the proof cover the claim?','Ready or typed blocker','A receipt is attribution, not correctness proof.'],3:['Present the human gate','Show one decision state, the few facts that matter, and one next action.','Is the evidence sufficient to assess?','Human decision or repair path','The workbench informs authority; it does not replace it.']};
+    function selectTab(name){document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===name)));document.querySelectorAll('[data-panel]').forEach(p=>p.hidden=p.dataset.panel!==name)}
+    function selectStep(number){const s=steps[number];document.querySelectorAll('[data-step]').forEach(b=>b.classList.toggle('active',b.dataset.step===String(number)));['step-title','step-copy','gate-copy','output-copy','talk-track'].forEach((id,i)=>document.getElementById(id).textContent=s[i])}
+    document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>selectTab(b.dataset.tab)));document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>selectStep(b.dataset.step)));
+    document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){selectTab('review');const active=Number(document.querySelector('.step.active').dataset.step);selectStep(Math.max(1,Math.min(3,active+(e.key==='ArrowRight'?1:-1))))}});
+  </script>
+</body>
+</html>

@@ -5,7 +5,13 @@
       "id": "interactive-workflow-workbench",
       "path": "skills/interactive-workflow-workbench",
       "license": "Apache-2.0",
-      "sha256": "3d3eae2507b3f00545f9711327b0cd4b93aaf3798fe51116e89fcbdf774f2115"
+      "sha256": "74b9c0294cc043b0c4db5a1079c5f671374eb714e3a9a2015c7606081ff23b10"
+    },
+    {
+      "id": "pr-review-workbench",
+      "path": "skills/pr-review-workbench",
+      "license": "Apache-2.0",
+      "sha256": "b04e5305b73905c3a65704ca203e3a50ef14d70c4001615aea3271a596357e8e"
     }
   ]
 }

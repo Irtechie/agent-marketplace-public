@@ -8,6 +8,11 @@ description: Create evidence-grounded interactive HTML workflow, architecture, l
 Create a real, evidence-backed interactive workbench rather than a decorative
 diagram.
 
+Open `examples/review-gate-workbench.html` for a small, self-contained reference
+showing the expected overview, workflow drill-in, numbered step rail, decision
+gate, evidence inspector, responsive layout, and keyboard stepping. Reuse its
+interaction grammar, not its subject matter or unsupported claims.
+
 ## Establish the Inputs
 
 Resolve these from the request, asking only for values that cannot be determined
