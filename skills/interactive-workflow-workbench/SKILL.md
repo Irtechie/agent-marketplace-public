@@ -1,6 +1,6 @@
 ---
 name: interactive-workflow-workbench
-description: Create evidence-grounded interactive HTML workflow, architecture, learning, decision, or control-plane diagrams with an overview topology, drill-in workflow logic, path tabs, per-tab step rails, labeled decision branches, bounded loops, escalation paths, evidence inspectors, and responsive self-contained output. Use when the user asks for an interactive workflow, architecture workbench, clickable diagram, step-through flow, logic-gate diagram, decision flow, system map, learning workbench, or control-plane visualization.
+description: Create evidence-grounded interactive HTML workbenches with a scrollable overview topology and separate human-readable workflow pages. Each drill-in page shows one coherent start-to-terminal path with ordered steps, limited visible complexity, labeled decisions, bounded repair loops, evidence, and explicit outcomes. Use for interactive workflows, architecture workbenches, clickable step-through flows, decision maps, learning paths, and control-plane visualizations.
 ---
 
 # Interactive Workflow Workbench
@@ -8,10 +8,10 @@ description: Create evidence-grounded interactive HTML workflow, architecture, l
 Create a real, evidence-backed interactive workbench rather than a decorative
 diagram.
 
-Open `examples/review-gate-workbench.html` for a small, self-contained reference
-showing the expected overview, workflow drill-in, numbered step rail, decision
-gate, evidence inspector, responsive layout, and keyboard stepping. Reuse its
-interaction grammar, not its subject matter or unsupported claims.
+Open `examples/review-gate-workbench.html` for a small, self-contained reference.
+It deliberately allows a broad overview page, then separates the normal review
+and repair workflows into readable path pages. Reuse that information
+architecture, not its subject matter or unsupported claims.
 
 ## Establish the Inputs
 
@@ -61,8 +61,10 @@ Do not start visual layout until the model is coherent.
 Use top tabs when the subject has multiple paths, domains, roles, or modes.
 
 - Add an `Overview` or `Full Topology` tab for systems, ownership, dependencies,
-  trust boundaries, and entry/exit points.
-- Give each distinct path its own tab and ordered step list.
+  trust boundaries, and entry/exit points. This page may be large and scrollable.
+- Treat the overview as a map, not as proof that the workflow is understandable.
+- Give each distinct human scenario or outcome path its own tab and ordered step
+  list. Prefer more focused tabs and steps over one overloaded diagram.
 - Reset the left rail to `1..X` inside each selected tab.
 - Encode tab and step in the URL fragment, such as
   `#tab-control-plane-step-3`.
@@ -72,14 +74,52 @@ Every selected step must identify participating nodes and active edges, explain
 what happens, show proof or acceptance, show failure or fallback behavior, list
 evidence, provide a short talk track, and state the likely caveat.
 
-### 3. Build coordinated graphs
+### 3. Make every drill-in a readable workflow page
+
+The overview may be a topology dump. Every other tab must read like an actual
+workflow a person can follow without reverse-engineering the system map.
+
+Each drill-in tab must:
+
+- represent one coherent scenario, role, mode, or outcome path;
+- start with an explicit trigger or entry state;
+- present a dominant reading direction: left-to-right or top-to-bottom;
+- keep the normal path visually obvious before showing exceptions;
+- place each decision next to the action that raises it;
+- label every outgoing branch with concrete language such as `Pass`, `Fail`,
+  `Yes`, `No`, `Retry 1/2`, `Escalate`, or the typed failure;
+- end every branch at an explicit success, blocked, escalated, cancelled, or
+  failed state;
+- omit nodes and edges that do not participate in that tab's scenario;
+- use the inspector for evidence and explanation instead of packing prose into
+  the graph.
+
+Default drill-in complexity limits:
+
+- at most 12 visible nodes;
+- at most 2 decision diamonds;
+- at most 2 simultaneously visible exception branches;
+- at most 14 visible edges;
+- no unlabeled cross-lane edge;
+- no edge crossing through a node card.
+
+If a truthful path exceeds a limit, add another workflow tab or sub-workflow
+page. Do not shrink text, stack cards, or route spaghetti around the canvas to
+keep it on one page. Scrolling is allowed when it preserves readable spacing;
+scrolling does not excuse an ambiguous path.
+
+Never reuse the full overview graph as the canvas for a drill-in tab with most
+nodes merely dimmed. Render a path-specific graph so irrelevant topology is not
+present.
+
+### 4. Build coordinated graphs
 
 Use custom HTML and SVG node cards and paths rather than Mermaid. Provide:
 
 1. An overview topology for systems, actors, boundaries, dependencies, and
-   entry/exit points.
-2. Workflow logic for ordered actions, decision gates, labeled branches,
-   bounded retries, approval gates, and explicit terminal states.
+   entry/exit points. It may contain the complete system map.
+2. Separate path-specific workflow graphs for ordered actions, decision gates,
+   labeled branches, bounded retries, approval gates, and terminal states.
 
 Use these node types:
 
@@ -103,7 +143,7 @@ Use semantic colors over a dark surface with high-contrast text:
 
 Color must communicate structure rather than decoration.
 
-### 4. Let topology choose the canvas
+### 5. Let topology choose the canvas
 
 - Use wide canvases for request/response pipelines.
 - Use tall canvases for hierarchies and lifecycles.
@@ -111,9 +151,10 @@ Color must communicate structure rather than decoration.
 - Size swimlanes to their content.
 - Fit and zoom responsively without destroying readable spacing.
 - Split dense graphs into overview and path tabs instead of forcing every edge
-  into one view.
+  into one view. A path tab must use its own reduced graph, not a filtered
+  full-topology graph.
 
-### 5. Implement the interaction contract
+### 6. Implement the interaction contract
 
 Include:
 
@@ -128,7 +169,7 @@ Include:
 
 Use `addEventListener` for computed interactions.
 
-### 6. Keep claims disciplined
+### 7. Keep claims disciplined
 
 - Use real names and current contracts.
 - Expand acronyms only when evidence supports the expansion.
@@ -139,7 +180,7 @@ Use `addEventListener` for computed interactions.
 - A passing command proves only its covered behavior.
 - Never include credentials, tokens, private keys, or literal secret values.
 
-### 7. Produce self-contained share output
+### 8. Produce self-contained share output
 
 When sharing is requested, create sandbox-safe HTML with:
 
@@ -153,7 +194,7 @@ When sharing is requested, create sandbox-safe HTML with:
 Keep the authoritative copy with the owning project. When a share copy is
 requested, make it byte-identical.
 
-### 8. Refresh a static preview when needed
+### 9. Refresh a static preview when needed
 
 Render the final overview state to PNG, link the README preview image to the
 HTML, and label it as a preview rather than the primary deliverable.
@@ -166,20 +207,29 @@ Before reporting completion:
 2. Validate tab, step, node, and edge indexes.
 3. Prove deep links restore the expected tab and local step number.
 4. Verify every tab's rail starts at 1 and ends at X.
-5. Verify decision nodes have labeled outgoing branches.
-6. Verify retry loops have bounds or exit conditions.
-7. Verify failure branches end in repair, escalation, blocker, cancellation, or
+5. Verify every non-overview tab has an explicit entry, ordered main path, and
+   explicit terminal outcome.
+6. Verify each non-overview graph stays within the default complexity limits or
+   documents why another split would make the workflow less truthful.
+7. Verify non-overview tabs omit nodes and edges unrelated to their scenario;
+   reject a dimmed full-topology graph as a drill-in.
+8. Verify decision nodes have labeled outgoing branches.
+9. Verify retry loops have bounds or exit conditions.
+10. Verify failure branches end in repair, escalation, blocker, cancellation, or
    failure.
-8. Verify overview drill-ins select the intended workflow tab.
-9. Verify required system names and current/planned distinctions.
-10. Verify the file has no external resources, forbidden APIs, or storage.
-11. Run a precise secret scan.
-12. Verify authoritative and share copies are byte-identical when both exist.
-13. Render and inspect the overview, a complex middle path, a decision branch,
-    a retry or escalation loop, a success state, and a blocked or failure state.
-14. Fix clipping, overlap, crossing or detached edges, contrast, overflow, and
-    misleading states, then re-render.
-15. Run the owning repository's quality gate when repository files changed.
+11. Verify overview drill-ins select the intended workflow tab.
+12. Verify required system names and current/planned distinctions.
+13. Verify the file has no external resources, forbidden APIs, or storage.
+14. Run a precise secret scan.
+15. Verify authoritative and share copies are byte-identical when both exist.
+16. Render and inspect the overview, every drill-in page, a decision branch,
+   a retry or escalation loop, a success state, and a blocked or failure state.
+17. At 100% zoom, perform the human comprehension check on every drill-in: within
+   ten seconds a reviewer must be able to identify the trigger, normal next
+   action, decision question, branch labels, and terminal outcome.
+18. Fix clipping, overlap, crossing or detached edges, contrast, overflow, and
+   misleading states, then re-render.
+19. Run the owning repository's quality gate when repository files changed.
 
 ## Delivery
 

@@ -5,7 +5,7 @@
       "id": "interactive-workflow-workbench",
       "path": "skills/interactive-workflow-workbench",
       "license": "Apache-2.0",
-      "sha256": "74b9c0294cc043b0c4db5a1079c5f671374eb714e3a9a2015c7606081ff23b10"
+      "sha256": "7239a8c44a0d247e3560ee373bc2c11f42318b8d8e17ebcd30151096f4893a6d"
     },
     {
       "id": "pr-review-workbench",
