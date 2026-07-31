@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "id": "interactive-workflow-workbench",
+      "path": "skills/interactive-workflow-workbench",
+      "license": "Apache-2.0",
+      "sha256": "7239a8c44a0d247e3560ee373bc2c11f42318b8d8e17ebcd30151096f4893a6d"
+    },
+    {
+      "id": "pr-review-workbench",
+      "path": "skills/pr-review-workbench",
+      "license": "Apache-2.0",
+      "sha256": "b04e5305b73905c3a65704ca203e3a50ef14d70c4001615aea3271a596357e8e"
+    }
+  ]
+}
