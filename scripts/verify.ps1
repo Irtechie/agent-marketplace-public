@@ -11,13 +11,24 @@ $seen = @{}
 $expected = @('interactive-workflow-workbench', 'pr-review-workbench')
 
 function Get-PackageHash([string]$SkillDir) {
+    $textExtensions = @(
+        '.cfg', '.css', '.csv', '.html', '.ini', '.js', '.json', '.md',
+        '.ps1', '.py', '.toml', '.txt', '.xml', '.yaml', '.yml'
+    )
     $files = Get-ChildItem -LiteralPath $SkillDir -Recurse -File |
         Where-Object { $_.Extension -ne '.pyc' -and $_.FullName -notmatch '[\\/]__pycache__[\\/]' } |
         Sort-Object FullName
     $builder = [System.Text.StringBuilder]::new()
     foreach ($file in $files) {
         $relative = $file.FullName.Substring($SkillDir.Length).TrimStart('\', '/').Replace('\', '/')
-        $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant()
+        $bytes = [System.IO.File]::ReadAllBytes($file.FullName)
+        if ($textExtensions -contains $file.Extension.ToLowerInvariant()) {
+            $utf8 = [System.Text.UTF8Encoding]::new($false, $true)
+            $content = $utf8.GetString($bytes).Replace("`r`n", "`n").Replace("`r", "`n")
+            $bytes = $utf8.GetBytes($content)
+        }
+        $fileDigest = [System.Security.Cryptography.SHA256]::Create().ComputeHash($bytes)
+        $hash = ([System.BitConverter]::ToString($fileDigest)).Replace('-', '').ToLowerInvariant()
         [void]$builder.Append($relative).Append("`n").Append($hash).Append("`n")
     }
     $bytes = [System.Text.UTF8Encoding]::new($false).GetBytes($builder.ToString())
